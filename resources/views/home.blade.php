@@ -21,7 +21,7 @@
   </div>
   <div class="form-group">Commnds
     <label for="formGroupExampleInput"> Commands (A,R or S)</label>
-    <input type="text" class="form-control" name="commands" value="ARAR">
+    <input type="text" class="form-control" name="commands" value="ARARARAR">
   </div>
   <button type="submit" class="btn btn-primary mb-2">Submit</button>
 </form>

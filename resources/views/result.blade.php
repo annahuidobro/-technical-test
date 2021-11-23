@@ -4,7 +4,7 @@
 <form>
   <fieldset disabled>
     <div class="form-group">
-      <label for="formGroupExampleInput">Succes=1/Fail=0:</label>
+      <label for="formGroupExampleInput">Result:</label>
       @if($success == 1)
         <input type="text" clas="form-control" name="success" value="Great! Rover arrived succesfully!">
       @else
@@ -24,7 +24,7 @@
       <input type="text" class="form-control" name="commands" value="{{$commands}}">
     </div>
     
-    <div class="form-group">Rectagle dimetions 
+    <div class="form-group">Rectagle dimetions: 
       <label for="formGroupExampleInput">Width:</label>
       <input type="text" class="form-control" name="rectangle_width" value="{{ $rectangleWidth }}">
       <label for="formGroupExampleInput">Height:</label>
