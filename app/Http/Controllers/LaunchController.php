@@ -64,13 +64,17 @@ class LaunchController extends Controller
                     $rectangleHeight,
                     $commands
                 );*/
+        $steps[] = $currentPosition;
 
         foreach ($commands as $index => $command) {
             if ($command === 'A') {
                 $currentPosition = $this->moveRover($currentPosition, $orientation);
+                $steps[] = $currentPosition;
 
                 if ($currentPosition['x'] > $rectangleWidth || $currentPosition['y'] > $rectangleHeight) {
-                    return false;
+                    //return false;
+                    $success = false;
+
                     /* dd(
                          'Crash',
                          $orientation,
@@ -87,6 +91,7 @@ class LaunchController extends Controller
                 $orientation = $this->turnRover($command, $orientation);
             }
         }
+        //dd($steps);
 
         return view('result', [
             'final_orientation' => $orientation,
@@ -96,7 +101,9 @@ class LaunchController extends Controller
             'rectangleHeight' => $rectangleHeight,
             'commands' => json_encode($commands),
             'success' => $success,
-            'final_position' => json_encode($currentPosition), ]);
+            'final_position' => json_encode($currentPosition),
+            'steps' => $steps,
+         ]);
         /*dd(
             'All right!',
             'orientation = '.$orientation,
@@ -131,35 +138,35 @@ class LaunchController extends Controller
     private function turnRover(string $command, string $orientation): string
     {
         if ($command === 'L' && $orientation === 'N') {
-            $orientation = 'W';
+            return 'W';
         }
 
         if ($command === 'L' && $orientation === 'E') {
-            $orientation = 'N';
+            return 'N';
         }
 
         if ($command === 'L' && $orientation === 'S') {
-            $orientation = 'E';
+            return 'E';
         }
 
         if ($command === 'L' && $orientation === 'W') {
-            $orientation = 'S';
+            return 'S';
         }
 
         if ($command === 'R' && $orientation === 'N') {
-            $orientation = 'E';
+            return 'E';
         }
 
         if ($command === 'R' && $orientation === 'E') {
-            $orientation = 'S';
+            return 'S';
         }
 
         if ($command === 'R' && $orientation === 'S') {
-            $orientation = 'W';
+            return 'W';
         }
 
         if ($command === 'R' && $orientation === 'W') {
-            $orientation = 'N';
+            return 'N';
         }
 
         return $orientation;
