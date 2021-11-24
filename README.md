@@ -23,25 +23,65 @@ $ php artisan key:generate
 ## Run de project
 
 1.1 With composer
+By default:
 ```
 $ composer run-script run-technical-test
 ```
 
+Execute commands with custom parameters:
+```
+$ php artisan run-technical-test --initial_orientation=N --rectangle_width=4 --rectangle_height=4 --initial_x=2 --initial_y=2 --commands=ARARARAR
+```
+
 1.2 With Postman
 
-![POST](public/img/post.png "POST") api/v1/login
+![POST](public/img/post.png "POST") api/apilaunch
+
+Postman Collection: technical-test.postman_collection.json
 
 Param | Type | Description
 ------- | ---------------- | :----------
-email  | `string` | Email of user.
-password  | `string` | Password.
+initial_orientation  | `string` | Initial orientation of the Rover. Available orienations: N, E, S, W.
+initial_x  | `integer` | Initial X position.
+initial_y  | `integer` | Initial Y position.
+rectangle_width  | `integer` | Rectangle width size.
+rectangle_height  | `integer` | Rectangle height size.
+commands  | `string` | Commands to move Rover. Available commands: A, L, R.
+
 
 200 OK
 ````json
 {
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
-    "user_id": 1,
-    "token_type": "bearer"
+    "success": false,
+    "final_orientation": "N",
+    "initialX": 2,
+    "initialY": 2,
+    "rectangleWidth": 4,
+    "rectangleHeight": 4,
+    "commands": [
+        "A",
+        "R",
+        "A",
+        "R",
+        "A",
+        "R",
+        "A",
+        "R"
+    ],
+    "final_position": {
+        "x": 3,
+        "y": 2
+    },
+    "steps": [
+        {
+            "x": 2,
+            "y": 2
+        },
+        {
+            "x": 3,
+            "y": 2
+        }
+    ]
 }
 ````
 

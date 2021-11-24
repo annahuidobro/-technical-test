@@ -1,55 +1,70 @@
-<h1>Expedition result:</h1>
+@extends('layout')
 
+@section('content')
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="mb-3">Expedition result:</h1>
 
-<form>
-  <fieldset disabled>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Result:</label>
-      @if($success == 1)
-        <input type="text" clas="form-control" name="success" value="Great! Rover arrived succesfully!">
-      @else
-        <input type="text" clas="form-control" name="success" value="Oh! Rover came out of the square">
-      @endif
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Final possition:</label>
-      <input type="text" class="form-control" name="final_position" value="{{$final_position}}">
-    </!--div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Final oritentaion</label>
-      <input type="text" class="form-control" name="final_orientation" value="{{$final_orientation}}">
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Used commands:</label>
-      <input type="text" class="form-control" name="commands" value="{{$commands}}">
-    </div>
-    
-    <div class="form-group">Rectagle dimetions: 
-      <label for="formGroupExampleInput">Width:</label>
-      <input type="text" class="form-control" name="rectangle_width" value="{{ $rectangleWidth }}">
-      <label for="formGroupExampleInput">Height:</label>
-      <input type="text" class="form-control" name="rectangleHeight" value="{{$rectangleHeight}}">
-    </div>
-    <div class="form-group">Steps:
-      @foreach($steps as $step)
-        <input type="text" class="form-control" name="steps" value="({{ $step['x'] }}, {{ $step['y'] }})">
-      @endforeach
-    </div>
-  </fieldset>
-</form>
+        <table class="table table-striped mt-4">
+          <tbody>
+          <tr>
+              <td>Result</td>
+              <td>
+                @if($success == 1)
+                  <p>Great! Rover arrived succesfully!</p>
+                @else
+                  <p>Oh! Rover came out of the square</p>
+                @endif
+              </td>
+            </tr>
+            <tr>
+              <td>Final position:</td>
+              <td>{{ $final_position }}</td>
+            </tr>
+            <tr>
+              <td>Final orientation:</td>
+              <td>{{ $final_orientation }}</td>
+            </tr>
+            <tr>
+              <td>Used commands:</td>
+              <td>{{ $commands }}</td>
+            </tr>
+            <tr>
+              <td>Rectagle dimetions (width):</td>
+              <td>{{ $rectangleWidth }}</td>
+            </tr>
+            <tr>
+              <td>Rectagle dimetions (height):</td>
+              <td>{{ $rectangleHeight }}</td>
+            </tr>
+            <tr>
+              <td>Steps</td>
+              <td>
+                @foreach($steps as $step)
+                  <p>({{ $step['x'] }}, {{ $step['y'] }})</p>
+                @endforeach
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-<p>
-<a class="btn btn-primary" data-toggle="collapse" href="{{route('home')}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Go back
-  </a>
-</p>
+        <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="{{route('home')}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Go back
+          </a>
+        </p>
 
-@if ($errors->any())
-      <div class="alert alert-danger">
-          <ul>
+        @if ($errors->any())
+          <div class="alert alert-danger">
+            <ul>
               @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
+                <li>{{ $error }}</li>
               @endforeach
-          </ul>
+            </ul>
+          </div>
+        @endif
       </div>
-@endif
+    </div>
+  </div>
+@endsection

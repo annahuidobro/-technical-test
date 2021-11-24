@@ -1,0 +1,65 @@
+{
+	"info": {
+		"_postman_id": "99a25729-57ec-4149-b721-962dfacb2ee6",
+		"name": "technical-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "(POST) API Launch Rover",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "initial_orientation",
+							"value": "N",
+							"type": "text"
+						},
+						{
+							"key": "rectangle_width",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "rectangle_height",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "initial_x",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "initial_y",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "commands",
+							"value": "ARARARAR",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/rover/public/api/apilaunch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rover",
+						"public",
+						"api",
+						"apilaunch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
