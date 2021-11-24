@@ -29,7 +29,7 @@ class AI
 
                 $gps->savePosition($position['x'], $position['y']);
 
-                if ($map->isInsideMap()) {
+                if ($map->isInsideMap() === false) {
                     return false;
                 }
             } else {

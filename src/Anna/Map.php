@@ -16,9 +16,9 @@ class Map
             throw new Exception('Invalid initial rectangle dimension provided');
         }
 
-        $this->width  = $width;
+        $this->width = $width;
         $this->height = $height;
-        $this->gps    = $gps;
+        $this->gps = $gps;
     }
 
     public function isInsideMap(): bool

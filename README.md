@@ -52,7 +52,7 @@ commands  | `string` | Commands to move Rover. Available commands: A, L, R.
 200 OK
 ````json
 {
-    "success": false,
+    "success": true,
     "final_orientation": "N",
     "initialX": 2,
     "initialY": 2,
@@ -69,7 +69,7 @@ commands  | `string` | Commands to move Rover. Available commands: A, L, R.
         "R"
     ],
     "final_position": {
-        "x": 3,
+        "x": 2,
         "y": 2
     },
     "steps": [
@@ -79,6 +79,18 @@ commands  | `string` | Commands to move Rover. Available commands: A, L, R.
         },
         {
             "x": 3,
+            "y": 2
+        },
+        {
+            "x": 3,
+            "y": 3
+        },
+        {
+            "x": 2,
+            "y": 3
+        },
+        {
+            "x": 2,
             "y": 2
         }
     ]
