@@ -2,173 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
+use Anna\AI;
+use Anna\GPS;
+use Anna\Map;
+use Anna\Rover;
 use Illuminate\Http\Request;
 
 class LaunchController extends Controller
 {
-    const VALID_ORIENTATIONS = ['N', 'E', 'S', 'W'];
-    const VALID_COMMANDS = ['A', 'L', 'R'];
-
     public function __invoke(Request $request)
     {
-        // dd($request->all());
         $this->validate($request, [
             'initial_orientation' => 'min:1 | max:1',
-            'initial_x' => 'required',
-            'initial_y' => 'required',
-            'rectangle_width' => 'required',
-            'rectangle_height' => 'required',
-            'commands' => 'required',
+            'initial_x'           => 'required',
+            'initial_y'           => 'required',
+            'rectangle_width'     => 'required',
+            'rectangle_height'    => 'required',
+            'commands'            => 'required',
         ]);
 
-        $orientation = $request->get('initial_orientation');
-        if (in_array($orientation, self::VALID_ORIENTATIONS) === false) {
-            throw new Exception('Invalid orientation provided.');
-        }
+        $rover = new Rover($request->get('initial_orientation'));
+        $gps   = new GPS();
+        $map   = new Map($request->get('rectangle_width'), $request->get('rectangle_height'), $gps);
 
-        $initialX = $request->get('initial_x');
-        $initialY = $request->get('initial_y');
+        $gps->savePosition($request->get('initial_x'), $request->get('initial_y'));
 
-        if ($initialX < 0 || $initialY < 0) {
-            throw new Exception('Invalid initial position provided');
-        }
-
-        $rectangleWidth = $request->get('rectangle_width');
-        $rectangleHeight = $request->get('rectangle_height');
-
-        if ($rectangleWidth < 0 || $rectangleHeight < 0) {
-            throw new Exception('Invalid initial rectangle dimension provided');
-        }
-
-        $commands = str_split($request->get('commands'));
-
-        foreach ($commands as $command) {
-            if (in_array($command, self::VALID_COMMANDS) === false) {
-                throw new Exception('Invalid commands provided.');
-            }
-        }
-
-        $currentPosition = [
-            'x' => $initialX,
-            'y' => $initialY,
-        ];
-
-        $success = true;
-        /*
-                dd(
-                    $orientation,
-                    $initialX,
-                    $initialY,
-                    $rectangleWidth,
-                    $rectangleHeight,
-                    $commands
-                );*/
-        $steps[] = $currentPosition;
-
-        foreach ($commands as $index => $command) {
-            if ($command === 'A') {
-                $currentPosition = $this->moveRover($currentPosition, $orientation);
-                $steps[] = $currentPosition;
-
-                if ($currentPosition['x'] > $rectangleWidth || $currentPosition['y'] > $rectangleHeight) {
-                    //return false;
-                    $success = false;
-
-                    /* dd(
-                         'Crash',
-                         $orientation,
-                         $initialX,
-                         $initialY,
-                         $rectangleWidth,
-                         $rectangleHeight,
-                         $commands,
-                         $command,
-                         $index
-                     );*/
-                }
-            } else {
-                $orientation = $this->turnRover($command, $orientation);
-            }
-        }
-        //dd($steps);
+        $AI = new AI();
+        $AI->createCommands(str_split($request->get('commands')));
+        $success = $AI->executeCommands($rover, $gps, $map);
 
         return view('result', [
-            'final_orientation' => $orientation,
-            'initialX' => $initialX,
-            'initialY' => $initialY,
-            'rectangleWidth' => $rectangleWidth,
-            'rectangleHeight' => $rectangleHeight,
-            'commands' => json_encode($commands),
-            'success' => $success,
-            'final_position' => json_encode($currentPosition),
-            'steps' => $steps,
-         ]);
-        /*dd(
-            'All right!',
-            'orientation = '.$orientation,
-            'initialX = '.$initialX,
-            'initialY = '.$initialY,
-            'rectangleWidth = '.$rectangleWidth,
-            'rectangleHeight = '.$rectangleHeight,
-            'commands = '.json_encode($commands)
-        );*/
-    }
-
-    private function moveRover(array $position, string $orientation): array
-    {
-        switch ($orientation) {
-            case 'N':
-                $position['x']++;
-                break;
-            case 'E':
-                $position['y']++;
-                break;
-            case 'S':
-                $position['x']--;
-                break;
-            case 'W':
-                $position['y']--;
-                break;
-        }
-
-        return $position;
-    }
-
-    private function turnRover(string $command, string $orientation): string
-    {
-        if ($command === 'L' && $orientation === 'N') {
-            return 'W';
-        }
-
-        if ($command === 'L' && $orientation === 'E') {
-            return 'N';
-        }
-
-        if ($command === 'L' && $orientation === 'S') {
-            return 'E';
-        }
-
-        if ($command === 'L' && $orientation === 'W') {
-            return 'S';
-        }
-
-        if ($command === 'R' && $orientation === 'N') {
-            return 'E';
-        }
-
-        if ($command === 'R' && $orientation === 'E') {
-            return 'S';
-        }
-
-        if ($command === 'R' && $orientation === 'S') {
-            return 'W';
-        }
-
-        if ($command === 'R' && $orientation === 'W') {
-            return 'N';
-        }
-
-        return $orientation;
+            'final_orientation' => $rover->orientation(),
+            'initialX'          => $gps->firstPosition()['x'],
+            'initialY'          => $gps->firstPosition()['y'],
+            'rectangleWidth'    => $map->width(),
+            'rectangleHeight'   => $map->height(),
+            'commands'          => json_encode($AI->commands()),
+            'success'           => $success,
+            'final_position'    => json_encode($gps->lastPosition()),
+            'steps'             => $gps->positions(),
+        ]);
     }
 }
