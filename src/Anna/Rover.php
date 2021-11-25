@@ -23,16 +23,16 @@ class Rover
     {
         switch ($orientation) {
             case 'N':
-                $position['x']++;
-                break;
-            case 'E':
                 $position['y']++;
                 break;
+            case 'E':
+                $position['x']++;
+                break;
             case 'S':
-                $position['x']--;
+                $position['y']--;
                 break;
             case 'W':
-                $position['y']--;
+                $position['x']--;
                 break;
         }
 
